@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class todoModelView: ObservableObject {
+class todoViewModel: ObservableObject {
     
     @Published private var model: todo
     
@@ -17,8 +17,8 @@ class todoModelView: ObservableObject {
         model = todo()
     }
     
-    func addItem(_ item: String){
-        model.addItem(item)
+    func addItem(title: String, content: String){
+        model.addItem(title: title, content: content)
     }
     
     func removeItem(_ id: Int) {

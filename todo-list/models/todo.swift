@@ -14,11 +14,11 @@ struct todo {
         itens = []
     }
     
-    mutating func addItem(_ item: String){
+    mutating func addItem(title: String, content: String){
         if let lastItem = itens.last {
-            itens.append(Item(content: item, id: lastItem.id + 1))
+            itens.append(Item(title: title, content: content, id: lastItem.id + 1))
         } else {
-            itens.append(Item(content: item, id: 0))
+            itens.append(Item(title: title, content: content, id: 0))
         }
     }
     
@@ -29,6 +29,7 @@ struct todo {
     }
     
     struct Item: Identifiable {
+        var title: String
         var content: String
         var id: Int
     }
