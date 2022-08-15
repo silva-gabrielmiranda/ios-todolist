@@ -12,7 +12,7 @@ struct todo {
     
     init(){
         itens = [
-            Item(title: "Esta é uma tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 0),
+            Item(isCompleted: true, title: "Esta é uma tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 0),
             Item(title: "Esta é uma outra tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 1)
         ]
     }
@@ -28,6 +28,12 @@ struct todo {
     mutating func removeItem(_ id: Int){
         if let index = itens.firstIndex(where: { $0.id == id }){
             itens.remove(at: index)
+        }
+    }
+    
+    mutating func toggleState(_ id: Int){
+        if let index = itens.firstIndex(where: { $0.id == id }){
+            itens[index].isCompleted = !itens[index].isCompleted
         }
     }
     

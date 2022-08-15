@@ -25,4 +25,8 @@ class todoViewModel: ObservableObject {
         model.removeItem(id)
     }
     
+    func toggleState(_ id: Int) {
+        model.toggleState(id)
+    }
+    
 }

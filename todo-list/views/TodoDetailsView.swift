@@ -15,8 +15,7 @@ struct TodoDetailsView: View {
     
     var body: some View {
         VStack {
-            Text(item.title)
-                .font(Font.title.bold())
+            title.font(Font.title.bold())
             HStack {
                 ScrollView {
                     Text(item.content)
@@ -25,10 +24,7 @@ struct TodoDetailsView: View {
                 Spacer()
             }
             Spacer()
-            Button("🗑") {
-                isShowingAlert = true
-            }
-                .font(Font.title.bold())
+            bottomOptions
         }
             .alert("Deseja apagar essa tarefa?", isPresented: $isShowingAlert) {
                 Button("Quero apagar") {
@@ -36,5 +32,24 @@ struct TodoDetailsView: View {
                 }
                 Button("Não!", role: .cancel) { }
             }
+    }
+    
+    private var title: some View {
+        if item.isCompleted {
+            return Text("✅ \(item.title)").foregroundColor(.green)
+        }
+        return Text(item.title)
+    }
+    private var bottomOptions: some View {
+        VStack {
+            Button( item.isCompleted ? "Marcar como pendente" : "Marcar como concluído") {
+                viewModel.toggleState(item.id)
+            }
+                .padding()
+            Button("🗑") {
+                isShowingAlert = true
+            }
+                .font(Font.title.bold())
+        }
     }
 }
