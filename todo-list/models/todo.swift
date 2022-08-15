@@ -11,7 +11,10 @@ struct todo {
     var itens: [Item]
     
     init(){
-        itens = []
+        itens = [
+            Item(title: "Esta é uma tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 0),
+            Item(title: "Esta é uma outra tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 1)
+        ]
     }
     
     mutating func addItem(title: String, content: String){
@@ -29,6 +32,7 @@ struct todo {
     }
     
     struct Item: Identifiable {
+        var isCompleted: Bool = false
         var title: String
         var content: String
         var id: Int

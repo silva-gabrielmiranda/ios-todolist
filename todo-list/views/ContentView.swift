@@ -10,13 +10,13 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var viewModel: todoViewModel
-    @State var showingAlert: Bool = false
+    @State var isShowingAlert: Bool = false
     
     var body: some View {
         NavigationView {
                 VStack{
                     List(viewModel.itens) { item in
-                        NavigationLink(destination: TodoDetailsView(item: item)) {
+                        NavigationLink(destination: TodoDetailsView(item: item, viewModel: viewModel)) {
                             createItem(item)
                         }
                     }
@@ -38,14 +38,17 @@ struct ContentView: View {
                 .font(Font.body.bold())
                 .onTapGesture {
                     withAnimation {
-                        showingAlert = true
+                        isShowingAlert = true
                     }
                 }
-                .alert("Deseja apagar este item?", isPresented: $showingAlert) {
-                    Button("Apagar") {
-                        viewModel.removeItem(item.id)
+                .alert("Deseja apagar essa tarefa?", isPresented: $isShowingAlert) {
+                    Button("Quero apagar") {
+                        DispatchQueue.main.async {
+                            viewModel.removeItem(item.id)
+                        }
                     }
-                    Button("Cancelar", role: .cancel) { }
+                    Button("Não!", role: .cancel) { }
+                        .foregroundColor(.red)
                 }
         }
     }
