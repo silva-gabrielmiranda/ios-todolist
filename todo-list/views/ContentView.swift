@@ -11,6 +11,7 @@ struct ContentView: View {
     
     @ObservedObject var viewModel: todoViewModel
     @State var isShowingAlert: Bool = false
+    @State var isDarkThemeActive: Bool = false
     
     var body: some View {
         NavigationView {
@@ -25,7 +26,12 @@ struct ContentView: View {
                 }
                 .navigationTitle("Lista de tarefas")
                 .navigationBarTitleDisplayMode(.automatic)
+                .toolbar {
+                    Toggle(isDarkThemeActive ? "🌑" : "☀️", isOn: $isDarkThemeActive)
+                        .toggleStyle(.switch)
+                }
         }
+        .preferredColorScheme( isDarkThemeActive ? .dark : .light )
     }
     
     @ViewBuilder
@@ -33,7 +39,7 @@ struct ContentView: View {
         HStack {
             Text(item.title)
             Spacer()
-            Text("X")
+            Text("❌")
                 .foregroundColor(.red)
                 .font(Font.body.bold())
                 .onTapGesture {
