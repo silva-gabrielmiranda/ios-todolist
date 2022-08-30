@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct todo {
+struct todo: Codable {
     var itens: [Item]
     
     init(){
         itens = [
-            Item(isCompleted: true, title: "Esta é uma tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 0),
+            Item(isCompleted: false, title: "Esta é uma tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 0),
             Item(title: "Esta é uma outra tarefa", content: "Tarefa de tarefar\nMuitas tarefas", id: 1)
         ]
     }
@@ -37,7 +37,14 @@ struct todo {
         }
     }
     
-    struct Item: Identifiable {
+    mutating func editItem(item: Item, title: String, content: String) {
+        if let index = itens.firstIndex(where: { $0.id == item.id }){
+            itens[index].title = title
+            itens[index].content = content
+        }
+    }
+    
+    struct Item: Identifiable, Codable {
         var isCompleted: Bool = false
         var title: String
         var content: String

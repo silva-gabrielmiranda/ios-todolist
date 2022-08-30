@@ -12,26 +12,59 @@ struct TodoDetailsView: View {
     var item: todo.Item
     var viewModel: todoViewModel
     @State var isShowingAlert: Bool = false
+    @State var itemContent: String
+    @State var itemTitle: String
+    @State var isEditing: Bool = false
+    
+    init(item: todo.Item, viewModel: todoViewModel) {
+        self.item = item
+        self.viewModel = viewModel
+        itemContent = self.item.content
+        itemTitle = self.item.title
+    }
     
     var body: some View {
         VStack {
             title.font(Font.title.bold())
-            HStack {
-                ScrollView {
-                    Text(item.content)
-                        .padding()
-                }
-                Spacer()
-            }
+            viewItemInformation
             Spacer()
             bottomOptions
         }
-            .alert("Deseja apagar essa tarefa?", isPresented: $isShowingAlert) {
-                Button("Quero apagar") {
-                    viewModel.removeItem(item.id)
+        .toolbar {
+            Image(systemName: "highlighter")
+                .onTapGesture {
+                    isEditing = !isEditing
                 }
-                Button("Não!", role: .cancel) { }
+        }
+        .alert("Deseja apagar essa tarefa?", isPresented: $isShowingAlert) {
+            Button("Quero apagar") {
+                viewModel.removeItem(item.id)
             }
+            Button("Não!", role: .cancel) { }
+        }
+    }
+    
+    private var viewItemInformation: some View {
+        HStack(alignment: .top) {
+            Text(item.content)
+                .padding()
+            Spacer()
+        }
+    }
+    
+    private var editing: some View {
+        Form {
+            Section("Título") {
+                TextField("", text: $itemTitle)
+            }
+            Section("Descrição") {
+                TextEditor(text: $itemContent)
+            }
+            Button("Salvar") {
+                viewModel.editItem(item, newTitle: itemTitle, newContent: itemContent)
+                isEditing = false
+            }
+        }
     }
     
     private var title: some View {
@@ -46,10 +79,12 @@ struct TodoDetailsView: View {
                 viewModel.toggleState(item.id)
             }
                 .padding()
-            Button("🗑") {
-                isShowingAlert = true
-            }
-                .font(Font.title.bold())
+            Image(systemName: "trash")
+                .resizable()
+                .frame(width: 24, height: 30)
+                .onTapGesture {
+                    isShowingAlert = true
+                }
         }
     }
 }

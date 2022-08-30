@@ -18,16 +18,15 @@ struct ContentView: View {
                 VStack{
                     List(viewModel.itens) { item in
                         NavigationLink(destination: TodoDetailsView(item: item, viewModel: viewModel)) {
-                            createItem(item)
+                            transformItem(item)
                         }
                     }
                     Spacer()
                     insertItemGroup
                 }
                 .navigationTitle("Lista de tarefas")
-                .navigationBarTitleDisplayMode(.automatic)
                 .toolbar {
-                    Toggle(isDarkThemeActive ? "🌑" : "☀️", isOn: $isDarkThemeActive)
+                    Toggle(isDarkThemeActive ? "🌑" : "☀️",isOn: $isDarkThemeActive)
                         .toggleStyle(.switch)
                 }
         }
@@ -35,9 +34,17 @@ struct ContentView: View {
     }
     
     @ViewBuilder
-    private func createItem(_ item: todo.Item) -> some View {
+    private func transformItem(_ item: todo.Item) -> some View {
         HStack {
-            Text(item.title)
+            Text(item.isCompleted ? "✅" : "⬜️")
+                .onTapGesture {
+                    withAnimation {
+                        viewModel.toggleState(item.id)
+                    }
+                }
+            Text("\(item.title)")
+                .strikethrough(item.isCompleted)
+                
             Spacer()
             Text("❌")
                 .foregroundColor(.red)
